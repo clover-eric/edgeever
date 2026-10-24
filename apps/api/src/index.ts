@@ -455,17 +455,27 @@ export const fetchEdgeEverApp = async (
 
 const worker = {
   async fetch(request: Request, env: WorkerBindings, ctx: ExecutionContext) {
-    if (isNotebookSitePagePath(new URL(request.url).pathname)) {
-      return (await renderNotebookSitePage(request, createCloudflareStorageAdapter(env).db,
-        () => env.ASSETS.fetch(new Request(new URL("/", request.url), { method: "GET" }))))!;
+    try {
+      if (isNotebookSitePagePath(new URL(request.url).pathname)) {
+        return (await renderNotebookSitePage(request, createCloudflareStorageAdapter(env).db,
+          () => env.ASSETS.fetch(new Request(new URL("/", request.url), { method: "GET" }))))!;
+      }
+      return fetchEdgeEverApp(request, {
+        ...env,
+        storage: createCloudflareStorageAdapter(env),
+        deploymentVersionCreatedAt: env.CF_VERSION_METADATA?.timestamp,
+        // workerd's default Internet egress checks resolved addresses against its public-only network policy.
+        publicNetworkFetch: (url, init) => fetch(url, init),
+      }, ctx);
+    } catch (error) {
+      console.error("EdgeEver outer fetch failure", error);
+      return Response.json({
+        ok: false,
+        diagnostic: "outer_fetch_failure",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      }, { status: 500 });
     }
-    return fetchEdgeEverApp(request, {
-      ...env,
-      storage: createCloudflareStorageAdapter(env),
-      deploymentVersionCreatedAt: env.CF_VERSION_METADATA?.timestamp,
-      // workerd's default Internet egress checks resolved addresses against its public-only network policy.
-      publicNetworkFetch: (url, init) => fetch(url, init),
-    }, ctx);
   },
   async scheduled(controller: ScheduledController, env: WorkerBindings, ctx: ExecutionContext) {
     const runtimeEnv = {
