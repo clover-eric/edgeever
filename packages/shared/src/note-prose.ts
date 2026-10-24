@@ -8,19 +8,16 @@ export const DEFAULT_NOTE_PROSE_LINE_HEIGHT: NoteProseLineHeight = 1.65;
 
 export const NOTE_PROSE_PALETTE_IDS = [
   "clay",
-  "orange",
   "dawn",
-  "emerald",
   "teal",
   "azure",
   "violet",
-  "plum",
   "pink",
   "slate",
 ] as const;
 export type NoteProsePaletteId = (typeof NOTE_PROSE_PALETTE_IDS)[number];
 
-export const NOTE_PROSE_PALETTE_CHOICES = ["native", ...NOTE_PROSE_PALETTE_IDS, "custom"] as const;
+export const NOTE_PROSE_PALETTE_CHOICES = ["native", ...NOTE_PROSE_PALETTE_IDS] as const;
 export type NoteProsePaletteChoice = (typeof NOTE_PROSE_PALETTE_CHOICES)[number];
 
 export const MAX_NOTE_PROSE_CSS_BYTES = 8 * 1024;
@@ -112,29 +109,18 @@ const palette = (colors: NoteProsePaletteColors): NoteProsePaletteColors => colo
 
 export const NOTE_PROSE_PALETTES: Record<NoteProsePaletteId, NoteProsePaletteColors> = {
   clay: palette({
-    accent: "#E02D32",
-    text: "#374151",
-    muted: "#374151",
-    surface: "#FFF7F7",
-    divider: "#FFD6D6",
-    link: "#B42318",
-    codeBackground: "#FFF1F1",
-    codeText: "#B42318",
-    background: "#FFFFFF",
-  }),
-  orange: palette({
-    accent: "#E07A2D",
+    accent: "#FF4C01",
     text: "#3A2E28",
     muted: "#746055",
-    surface: "#FFF4EA",
-    divider: "#F6D7BE",
-    link: "#B45309",
-    codeBackground: "#FFF4EA",
-    codeText: "#B45309",
+    surface: "#FFFCFA",
+    divider: "#F6D5C6",
+    link: "#C63C00",
+    codeBackground: "#FFF4EE",
+    codeText: "#C63C00",
     background: "#FFFFFF",
   }),
   dawn: palette({
-    accent: "#D9A521",
+    accent: "#8A6716",
     text: "#3D2A1B",
     muted: "#74613C",
     surface: "#FFFDF8",
@@ -144,30 +130,19 @@ export const NOTE_PROSE_PALETTES: Record<NoteProsePaletteId, NoteProsePaletteCol
     codeText: "#7C5500",
     background: "#FFFFFF",
   }),
-  emerald: palette({
-    accent: "#16A06E",
-    text: "#2C3A34",
-    muted: "#5C6F66",
-    surface: "#F4FBF7",
-    divider: "#D7EBE1",
-    link: "#0F7A54",
-    codeBackground: "#F3F7F5",
-    codeText: "#0F7A54",
-    background: "#FFFFFF",
-  }),
   teal: palette({
-    accent: "#22B8A7",
-    text: "#4D4F46",
-    muted: "#4D4F46",
-    surface: "#EEEFE9",
+    accent: "#20AD9D",
+    text: "#3E4C4A",
+    muted: "#5C6E6B",
+    surface: "#F2FBFA",
     divider: "#CDEFEA",
-    link: "#1A8F82",
+    link: "#14796E",
     codeBackground: "#ECFBF8",
-    codeText: "#1A8F82",
+    codeText: "#14796E",
     background: "#FFFFFF",
   }),
   azure: palette({
-    accent: "#2F80ED",
+    accent: "#2663EB",
     text: "#374151",
     muted: "#4B5563",
     surface: "#F5F8FC",
@@ -178,7 +153,7 @@ export const NOTE_PROSE_PALETTES: Record<NoteProsePaletteId, NoteProsePaletteCol
     background: "#FFFFFF",
   }),
   violet: palette({
-    accent: "#7567F8",
+    accent: "#7351CF",
     text: "#3F3F46",
     muted: "#3F3F46",
     surface: "#F4F4F5",
@@ -188,22 +163,11 @@ export const NOTE_PROSE_PALETTES: Record<NoteProsePaletteId, NoteProsePaletteCol
     codeText: "#5B4EE0",
     background: "#FFFFFF",
   }),
-  plum: palette({
-    accent: "#7A4E6E",
-    text: "#3A2E36",
-    muted: "#746068",
-    surface: "#FBF7F9",
-    divider: "#E8D7E0",
-    link: "#5E3A54",
-    codeBackground: "#F4ECF1",
-    codeText: "#5E3A54",
-    background: "#FFFFFF",
-  }),
   pink: palette({
-    accent: "#D4537E",
+    accent: "#BB456E",
     text: "#3A2E34",
     muted: "#746068",
-    surface: "#FDF2F6",
+    surface: "#FFFCFD",
     divider: "#F3D0DC",
     link: "#BE185D",
     codeBackground: "#FDF2F6",
@@ -211,7 +175,7 @@ export const NOTE_PROSE_PALETTES: Record<NoteProsePaletteId, NoteProsePaletteCol
     background: "#FFFFFF",
   }),
   slate: palette({
-    accent: "#89798B",
+    accent: "#796B7C",
     text: "#5C505E",
     muted: "#5C505E",
     surface: "#FAFAFA",
@@ -223,12 +187,18 @@ export const NOTE_PROSE_PALETTES: Record<NoteProsePaletteId, NoteProsePaletteCol
   }),
 };
 
+// Dark reading surfaces need lighter accents than the white-background palette.
+export const NOTE_PROSE_DARK_ACCENTS: Record<NoteProsePaletteId, string> = {
+  clay: "#FF996E",
+  dawn: "#D9B65C",
+  teal: "#70C7B8",
+  azure: "#8CB4F0",
+  violet: "#B39AE8",
+  pink: "#E794B0",
+  slate: "#BCACBF",
+};
+
 const LEGACY_EDITOR_THEME_PALETTES: Record<string, NoteProsePaletteChoice> = {
-  "minimal-emerald": "emerald",
-  "outline-emerald": "emerald",
-  "wechat-green": "emerald",
-  "modern-mint": "emerald",
-  grove: "emerald",
   letter: "dawn",
   stub: "dawn",
   brief: "teal",
@@ -278,10 +248,15 @@ export const parseNoteProseLineHeight = (value: unknown): NoteProseLineHeight | 
   return null;
 };
 
-export const parseNoteProsePalette = (value: unknown): NoteProsePaletteChoice | null =>
-  typeof value === "string" && (NOTE_PROSE_PALETTE_CHOICES as readonly string[]).includes(value)
+export const parseNoteProsePalette = (value: unknown): NoteProsePaletteChoice | null => {
+  // Red and orange now share the existing red identifier for older clients.
+  if (value === "orange") return "clay";
+  // Removed palettes and the custom color editor read as native.
+  if (value === "emerald" || value === "green" || value === "plum" || value === "custom") return "native";
+  return typeof value === "string" && (NOTE_PROSE_PALETTE_CHOICES as readonly string[]).includes(value)
     ? value as NoteProsePaletteChoice
     : null;
+};
 
 const isColorSet = (value: unknown): value is NoteProseCustomColorSet => {
   if (typeof value !== "object" || value === null) return false;
@@ -309,7 +284,6 @@ export const paletteForLegacyEditorTheme = (theme: string | null | undefined): N
   if (!theme || theme === "default" || theme === "marxico") return null;
   const mapped = LEGACY_EDITOR_THEME_PALETTES[theme];
   if (mapped) return mapped;
-  if (theme === "custom" || theme.startsWith("custom-")) return "custom";
   return null;
 };
 
@@ -323,11 +297,9 @@ export const noteProseCodeFontSize = (fontSize: number): number => {
 export const resolveNoteProse = (account: Partial<AccountNoteProse> | null | undefined): ResolvedNoteProse => ({
   fontSize: account?.fontSize ?? DEFAULT_NOTE_PROSE_FONT_SIZE,
   lineHeight: account?.lineHeight ?? DEFAULT_NOTE_PROSE_LINE_HEIGHT,
-  palette: account?.palette ?? "native",
+  palette: parseNoteProsePalette(account?.palette) ?? "native",
   customCss: account?.customCss ?? "",
-  customColors: account?.palette === "custom"
-    ? account.customColors ?? DEFAULT_NOTE_PROSE_CUSTOM_COLORS
-    : account?.customColors ?? null,
+  customColors: account?.customColors ?? null,
 });
 
 export const publicNoteProseFromAccount = (account: Partial<AccountNoteProse> | null | undefined): PublicNoteProse => {
@@ -337,7 +309,7 @@ export const publicNoteProseFromAccount = (account: Partial<AccountNoteProse> | 
     lineHeight: resolved.lineHeight,
     palette: resolved.palette,
     customCss: resolved.customCss,
-    customColors: resolved.palette === "custom" ? resolved.customColors : null,
+    customColors: null,
   };
 };
 
@@ -366,11 +338,9 @@ export const noteProseMigrationPatch = (
   },
 ): NoteProsePatch => {
   const patch: NoteProsePatch = {};
-  if (account.palette == null && local.palette && local.palette !== "native") {
-    patch.palette = local.palette;
-    if (local.palette === "custom") {
-      patch.customColors = local.customColors ?? DEFAULT_NOTE_PROSE_CUSTOM_COLORS;
-    }
+  const palette = parseNoteProsePalette(local.palette);
+  if (account.palette == null && palette && palette !== "native") {
+    patch.palette = palette;
   }
   if (account.customCss == null && local.customCss?.trim()) {
     patch.customCss = local.customCss;
@@ -380,20 +350,6 @@ export const noteProseMigrationPatch = (
 
 export const noteProsePaletteColors = (prose: Pick<ResolvedNoteProse, "palette" | "customColors">): NoteProsePaletteColors | null => {
   if (prose.palette === "native") return null;
-  if (prose.palette === "custom") {
-    const light = prose.customColors?.light ?? DEFAULT_NOTE_PROSE_CUSTOM_COLORS.light;
-    return {
-      accent: light.accent,
-      text: light.text,
-      muted: light.muted,
-      surface: light.soft,
-      divider: light.border,
-      link: light.accent,
-      codeBackground: light.codeBackground,
-      codeText: light.text,
-      background: light.background,
-    };
-  }
   return NOTE_PROSE_PALETTES[prose.palette];
 };
 
@@ -407,6 +363,10 @@ export const noteProseCssVariables = (prose: ResolvedNoteProse): Record<string, 
   const colors = noteProsePaletteColors(prose);
   if (!colors) return variables;
   variables["--note-palette-accent"] = colors.accent;
+  variables["--note-palette-light-accent"] = colors.accent;
+  if (prose.palette !== "native") {
+    variables["--note-palette-dark-accent"] = NOTE_PROSE_DARK_ACCENTS[prose.palette];
+  }
   variables["--note-palette-text"] = colors.text;
   variables["--note-palette-muted"] = colors.muted;
   variables["--note-palette-surface"] = colors.surface;
@@ -415,20 +375,5 @@ export const noteProseCssVariables = (prose: ResolvedNoteProse): Record<string, 
   variables["--note-palette-code-bg"] = colors.codeBackground;
   variables["--note-palette-code-text"] = colors.codeText;
   variables["--note-palette-bg"] = colors.background;
-  if (prose.palette === "custom") {
-    const light = prose.customColors?.light ?? DEFAULT_NOTE_PROSE_CUSTOM_COLORS.light;
-    const dark = prose.customColors?.dark ?? DEFAULT_NOTE_PROSE_CUSTOM_COLORS.dark;
-    variables["--note-palette-heading"] = light.heading;
-    variables["--note-palette-dark-accent"] = dark.accent;
-    variables["--note-palette-dark-text"] = dark.text;
-    variables["--note-palette-dark-muted"] = dark.muted;
-    variables["--note-palette-dark-heading"] = dark.heading;
-    variables["--note-palette-dark-surface"] = dark.soft;
-    variables["--note-palette-dark-divider"] = dark.border;
-    variables["--note-palette-dark-link"] = dark.accent;
-    variables["--note-palette-dark-code-bg"] = dark.codeBackground;
-    variables["--note-palette-dark-code-text"] = dark.text;
-    variables["--note-palette-dark-bg"] = dark.background;
-  }
   return variables;
 };

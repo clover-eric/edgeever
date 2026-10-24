@@ -72,6 +72,35 @@ describe("editor typography contract", () => {
     expect(placeholderRules).toMatch(/color\s*:\s*#a8b5c4/);
   });
 
+  test("paints bold text with the palette accent", () => {
+    const prose = readStyle("./note-prose.css");
+    const boldRules = declarationsForSelector(prose, ".ProseMirror strong");
+
+    expect(boldRules).toMatch(/color:\s*var\(--note-palette-accent\)/);
+    expect(prose).toMatch(/--note-palette-accent:\s*var\(--note-palette-dark-accent\)\s*!important/);
+    expect(prose).not.toContain('data-note-palette="custom"');
+  });
+
+  test("named palettes recolor links, bold, inline code, checked task boxes, and table surfaces", () => {
+    const prose = readStyle("./note-prose.css");
+
+    expect(prose).toMatch(/color:\s*var\(--note-palette-link\)/);
+    expect(prose).toMatch(/color:\s*var\(--note-palette-code-text\)/);
+    expect(prose).toMatch(/background:\s*var\(--note-palette-code-bg\)/);
+    expect(prose).toMatch(/color:\s*var\(--note-palette-accent\)/);
+    expect(prose).toMatch(/accent-color:\s*var\(--note-palette-accent\)/);
+    expect(prose).toMatch(/ul\[data-type="taskList"\] li\[data-checked\] > label input/);
+    expect(prose).toMatch(/\.ProseMirror code/);
+    expect(prose).toMatch(/\.ProseMirror pre code/);
+    expect(prose).toMatch(/background:\s*var\(--note-palette-surface\)/);
+    const globals = readStyle("./globals.css");
+    expect(declarationsForSelector(globals, ".ProseMirror code")).toContain("color: #3d4450;");
+    expect(prose).not.toMatch(/--note-palette-text/);
+    expect(prose).not.toMatch(/--note-palette-muted/);
+    expect(prose).not.toMatch(/--note-palette-divider/);
+    expect(prose).not.toMatch(/blockquote/);
+  });
+
   test("keeps bold and italic text visible across platform font fallbacks", () => {
     const globals = readStyle("./globals.css");
     const mobileEditor = readStyle("./mobile-markdown-editor.css");

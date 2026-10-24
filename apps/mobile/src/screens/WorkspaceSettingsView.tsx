@@ -52,6 +52,7 @@ const MOBILE_LOCALE_OPTIONS: Array<{ label: string; value: MobileLocalePreferenc
   { label: "简体中文", value: "zh-CN" },
   { label: "English", value: "en-US" },
   { label: "日本語", value: "ja" },
+  { label: "Polski", value: "pl" },
 ];
 type SettingsTab = "general" | "account" | "system";
 export type MobileLocaleMode = MobileLocalePreference;
@@ -89,7 +90,10 @@ export const SettingsView = ({
   onClose,
   onImageCompressionChange,
   onLocalePreferenceChange,
+  onShowDescendantNotesChange,
   onSignOut,
+  showDescendantNotes,
+  showDescendantNotesSaveFailed,
 }: {
   currentUser: AuthUser | null;
   imageCompressionEnabled: boolean;
@@ -97,7 +101,10 @@ export const SettingsView = ({
   onClose: () => void;
   onImageCompressionChange: (enabled: boolean) => void;
   onLocalePreferenceChange: (locale: MobileLocaleMode) => void;
+  onShowDescendantNotesChange: (enabled: boolean) => void;
   onSignOut: () => void;
+  showDescendantNotes: boolean;
+  showDescendantNotesSaveFailed: boolean;
 }) => {
   const { resolvedTheme, toggleTheme } = useMobileTheme();
   const { translate } = useMobileLocale();
@@ -217,6 +224,17 @@ export const SettingsView = ({
                 </View>
                 <View style={styles.settingsSwitchStart}>
                   <Switch accessibilityLabel={translate("是否压缩笔记内图片")} onValueChange={onImageCompressionChange} value={imageCompressionEnabled} />
+                </View>
+              </View>
+            </View>
+            <View style={styles.settingsContentRow}>
+              <View style={styles.preferenceStack}>
+                <View style={styles.preferenceText}>
+                  <Text style={styles.settingsRowTitle}>父笔记本中显示子笔记本笔记</Text>
+                  {showDescendantNotesSaveFailed ? <Text accessibilityRole="alert" style={styles.errorText}>无法保存“父笔记本中显示子笔记本笔记”设置，请稍后重试</Text> : null}
+                </View>
+                <View style={styles.settingsSwitchStart}>
+                  <Switch accessibilityLabel={translate("是否在父笔记本中显示子笔记本中的笔记")} onValueChange={onShowDescendantNotesChange} value={showDescendantNotes} />
                 </View>
               </View>
             </View>
@@ -408,6 +426,8 @@ const SystemInfoCard = ({
       ? (english ? "Restart to apply" : "重启以应用")
       : updateKind === "ota"
         ? (english ? "Download update" : "下载更新")
+        : updateKind === "play"
+          ? (english ? "Update with Google Play" : "通过 Google Play 更新")
         : copy.openUpdate;
 
   const copySystemInfo = async () => {
@@ -520,6 +540,7 @@ const getMobileSystemInfoText = (localePreference: MobileLocaleMode) =>
         connectionFailed: "Connection failed",
         connectionSection: "Connection and sync",
         containerImageSource: "Container image source",
+        imageBuiltAt: "Image built at",
         databaseBackend: "Database backend",
         databaseVersion: "Database version",
         description: "View cloud instance and current client diagnostics.",
@@ -530,6 +551,7 @@ const getMobileSystemInfoText = (localePreference: MobileLocaleMode) =>
         followSystem: "Follow system",
         installMode: "Mode",
         instanceBuild: "Instance build",
+        deploymentVersionTime: "Instance deployment time",
         instanceConnection: "Instance connection",
         instanceUrl: "Instance URL",
         instanceVersion: "Instance version",
@@ -569,6 +591,7 @@ const getMobileSystemInfoText = (localePreference: MobileLocaleMode) =>
         connectionFailed: "连接失败",
         connectionSection: "连接与同步",
         containerImageSource: "容器镜像来源",
+        imageBuiltAt: "镜像构建时间",
         databaseBackend: "数据库后端",
         databaseVersion: "数据库版本",
         description: "查看云端实例与当前客户端的诊断信息。",
@@ -579,6 +602,7 @@ const getMobileSystemInfoText = (localePreference: MobileLocaleMode) =>
         followSystem: "跟随系统",
         installMode: "安装形态",
         instanceBuild: "实例构建",
+        deploymentVersionTime: "实例部署时间",
         instanceConnection: "实例连接",
         instanceUrl: "实例地址",
         instanceVersion: "实例版本",
@@ -741,12 +765,26 @@ const getMobileSystemInfoGroups = (
         { label: copy.databaseBackend, value: getMobileDatabaseBackend(instance?.health.storage?.database, copy.unknown) },
         { label: copy.deploymentPlatform, value: getMobileDeploymentPlatform(instance?.health.runtime, english) },
         { label: copy.instanceBuild, mono: true, value: instance?.health.build || copy.unknown, wide: true },
+        {
+          label: copy.deploymentVersionTime,
+          value: instance?.health.deploymentVersionCreatedAt && Number.isFinite(Date.parse(instance.health.deploymentVersionCreatedAt))
+            ? new Intl.DateTimeFormat(english ? "en-US" : "zh-CN", { dateStyle: "medium", timeStyle: "short" }).format(new Date(instance.health.deploymentVersionCreatedAt))
+            : copy.unknown,
+        },
         { fullWidth: true, label: copy.newUploadObjectStorage, value: getMobileObjectStorage(instance?.health, english, copy.unknown) },
         ...(instance?.health.objectStorageProvider === "s3"
           ? [{ fullWidth: true, label: copy.existingAttachments, value: copy.existingAttachmentsOriginalStorage }]
           : []),
         ...(instance?.health.runtime === "self-hosted-bun"
-          ? [{ fullWidth: true, label: copy.containerImageSource, value: getMobileContainerImageSource(instance.health.containerImageSource, english) }]
+          ? [
+              { fullWidth: true, label: copy.containerImageSource, value: getMobileContainerImageSource(instance.health.containerImageSource, english) },
+              {
+                label: copy.imageBuiltAt,
+                value: instance.health.buildCreatedAt && Number.isFinite(Date.parse(instance.health.buildCreatedAt))
+                  ? new Intl.DateTimeFormat(english ? "en-US" : "zh-CN", { dateStyle: "medium", timeStyle: "short" }).format(new Date(instance.health.buildCreatedAt))
+                  : copy.unknown,
+              },
+            ]
           : []),
       ],
       title: copy.cloudSection,
@@ -819,5 +857,6 @@ const buildMobileFeedbackUrl = (
       ? "The following information was generated by EdgeEver to help diagnose the issue."
       : "以下信息由 EdgeEver 自动生成，可帮助定位问题。",
     titlePrefix: english ? "[Feedback] " : "[反馈] ",
+    client: "Android",
   });
 };

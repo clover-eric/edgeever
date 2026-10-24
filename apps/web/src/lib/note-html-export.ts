@@ -1,6 +1,7 @@
 import hljs from "highlight.js/lib/common";
 import { renderMermaidSVG, THEMES } from "beautiful-mermaid";
 import { MERMAID_THEME_PALETTES } from "@/components/ThemeProvider";
+import { scaleMermaidSvg } from "@/lib/mermaid-svg";
 
 const WINDOWS_RESERVED_NAME = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i;
 const EXPORT_FONT_FAMILY =
@@ -65,6 +66,7 @@ export const getHtmlImageEmbedNoticeKind = (
 
 export const buildHtmlFilename = (title: string, fallback: string) => {
   const sanitized = title
+    // oxlint-disable-next-line no-control-regex -- replaces control characters in export filenames
     .replace(/[\u0000-\u001f<>:"/\\|?*]/g, "-")
     .replace(/\s+/g, " ")
     .replace(/[. ]+$/g, "")
@@ -186,13 +188,13 @@ export const renderMermaidBlocksForHtmlExport = async (root: HTMLElement) => {
     }
 
     try {
-      const svg = renderMermaidSVG(source, {
+      const svg = scaleMermaidSvg(renderMermaidSVG(source, {
         ...THEMES["zinc-light"],
         ...MERMAID_THEME_PALETTES["zinc-light"],
         transparent: true,
         font: EXPORT_FONT_FAMILY,
         padding: 24,
-      });
+      }));
       const figure = document.createElement("figure");
       figure.className = "edgeever-html-mermaid";
       figure.innerHTML = svg;

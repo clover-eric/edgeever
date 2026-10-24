@@ -1,29 +1,29 @@
 {
-  "version": "1.90.0",
+  "version": "2.4.0",
   "changes": {
     "en-US": [
-      "Mind maps and flowcharts default to the Plain theme, with medium-gray emphasis. Diagrams without a saved theme use that look, and every diagram canvas uses the note editor surface.",
-      "The infographic editor opens without getting stuck, and updating its registry no longer breaks rendering.",
-      "The note header shows a GitHub link in place of the search button.",
-      "Copying a note as rich text shows a near-black success toast. The menu is now labeled Copy as Rich Text.",
-      "The mobile system info screen is more compact, and its text stays readable.",
-      "The settings tab for tokens is labeled API / MCP."
+      "On the web and desktop, select a standalone image to align it left, center, or right. The choice stays with that image through save, Markdown edits, and reload. Existing images keep their previous layout until an alignment is chosen, and galleries keep their own layout. Android and iOS apply a saved alignment and do not add a picker in this release. Thanks @MadlyFX for #654.",
+      "Each image gallery can fit its width or its height. Fit width keeps the previous cropped tiles, and fit height shows every image whole inside an even tile. The choice stays with that gallery, and sharing, HTML export, and print follow it. Older galleries stay on fit width. Android and iOS gallery toolbars offer the same choice. Thanks @MadlyFX for #655.",
+      "On the web and desktop, Ctrl or Cmd plus 1 through 6 sets the current rich-text paragraph to that heading, and 0 restores body text. Markdown source and plain-text editing are unchanged. On the desktop app, that 0 chord no longer also resets the window zoom.",
+      "Packaged Windows and macOS can open EdgeEver after the computer starts. The switch stays off until it is turned on. It can then open the main window or stay in the tray.",
+      "On the web and desktop, a named palette now tints table headers and alternating rows with that palette's quiet surface color. Borders stay neutral, and dark mode follows the same palette. Print and copies for WeChat use those table backgrounds.",
+      "In the desktop app, code blocks in assistant replies can be copied."
     ],
     "zh-CN": [
-      "思维导图和流程图默认使用素简主题，强调色改为中灰。未保存主题的图也按素简显示，所有图的画布都使用笔记编辑器的底色。",
-      "信息图编辑器可以正常打开，更新注册表也不会再导致渲染失败。",
-      "笔记顶栏用 GitHub 链接替换了搜索按钮。",
-      "把笔记复制到公众号或博客后，会看到近黑的成功提示。菜单名称改为「复制到公众号 / 博客」。",
-      "手机上的系统信息页更紧凑，文字保持可读。",
-      "设置里的令牌页签改名为 API / MCP。"
+      "在 Web 和桌面端选中单独的图片后，可以左对齐、居中或右对齐。选择会保存在这张图片上，保存、编辑 Markdown 和重新打开后仍然保留。已有图片在选择之前保持原来的排版，图库仍使用自己的布局。Android 与 iOS 会按已保存的对齐显示，这次还不提供选择按钮。感谢 @MadlyFX 的贡献（#654）。",
+      "每个图片画廊可以选择适应宽度或适应高度。适应宽度保持原来的裁剪效果，适应高度会在同样大小的格子里完整显示每张图片。设置只影响当前画廊，分享、HTML 导出和打印会跟着变化，旧画廊仍使用适应宽度。Android 与 iOS 的画廊工具栏也提供这两个选项。感谢 @MadlyFX 的贡献（#655）。",
+      "在 Web 和桌面端的富文本里，按 Ctrl 或 ⌘ 加 1 到 6 可以把当前段落设成对应标题，按 0 恢复正文。Markdown 源码和纯文本编辑不受影响。桌面端按 0 时不再同时重置窗口缩放。",
+      "打包后的 Windows 和 macOS 可以在开机后启动 EdgeEver。这项开关默认关闭。开启后可以选择打开主窗口，或只留在托盘。",
+      "在 Web 和桌面端，笔记选用配色后，表格表头和隔行底色会使用同一套浅色表面，边框保持中性，深色模式也会跟着变浅。打印和复制到公众号时的表格背景使用同一套配色。",
+      "桌面端里，助手回复中的代码块可以复制了。"
     ],
     "ja": [
-      "マインドマップとフローチャートの初期テーマを「素」にし、強調色をミディアムグレーにしました。テーマを保存していない図もこの見た目になり、図のキャンバスはノート編集画面の背景色を使います。",
-      "インフォグラフィック編集画面が途中で止まらなくなり、レジストリを更新しても描画に失敗しなくなりました。",
-      "ノート上部の検索ボタンを GitHub リンクに置き換えました。",
-      "書式付きでコピーすると、ほぼ黒の成功表示が出ます。メニュー名は「書式付きコピー」になりました。",
-      "モバイルのシステム情報画面をよりコンパクトにし、文字サイズは読みやすさを保ちました。",
-      "設定のトークンタブの名前を API / MCP に変更しました。"
+      "Web とデスクトップで単独の画像を選び、左揃え、中央揃え、右揃えにできます。選択はその画像に保存され、保存、Markdown の編集、開き直しの後も残ります。既存の画像は選ぶまで以前の配置のままです。ギャラリーは独自の配置を使います。Android と iOS は保存された配置を表示しますが、今回は選択ボタンを追加しません。@MadlyFX の貢献に感謝します（#654）。",
+      "各画像ギャラリーで、幅に合わせるか高さに合わせるかを選べます。幅に合わせるは従来のトリミング表示です。高さに合わせると、同じ大きさのマス内に各画像を全体表示します。設定はそのギャラリーだけに保存され、共有、HTML 書き出し、印刷にも反映されます。既存のギャラリーは幅に合わせたままです。Android と iOS のギャラリーツールバーにもこの二つがあります。@MadlyFX の貢献に感謝します（#655）。",
+      "Web とデスクトップのリッチテキストで、Ctrl または ⌘ と 1 から 6 を押すと現在の段落がそのレベルの見出しになり、0 で本文に戻します。Markdown ソースとプレーンテキストの編集には影響しません。デスクトップアプリでは、0 を押してもウィンドウの拡大率が同時にリセットされません。",
+      "パッケージ版の Windows と macOS では、パソコンの起動後に EdgeEver を開けます。このスイッチは自分でオンにするまでオフです。オンにすると、メインウィンドウを開くか、トレイだけに残すかを選べます。",
+      "Web とデスクトップでノートの配色を選ぶと、表の見出しと交互の行が同じ落ち着いた面の色になり、枠線は中立のままです。ダークモードでも表面の色は配色に合わせます。印刷と微信公式アカウント向けコピーの表背景も同じ配色を使います。",
+      "デスクトップアプリで、アシスタントの返信にあるコードブロックをコピーできるようになりました。"
     ]
   }
 }

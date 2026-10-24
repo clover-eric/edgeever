@@ -84,6 +84,11 @@ export const listLocalNotebooks = async (scope: string): Promise<{ notebooks: No
   };
 };
 
+export const upsertLocalNotebook = async (scope: string, notebook: Notebook) => {
+  const db = await getDatabase();
+  await upsertNotebook(db, scope, notebook);
+};
+
 export const listLocalTags = async (scope: string): Promise<{ tags: TagSummary[] }> => {
   const db = await getDatabase();
   const rows = await db.getAllAsync<StoredMemoRow>(
@@ -131,7 +136,9 @@ export const listLocalMemos = async (scope: string, params: LocalMemoListParams)
       ? "is_pinned DESC, created_at DESC, id DESC"
       : params.sort === "title-asc"
         ? "is_pinned DESC, title COLLATE NOCASE ASC, updated_at DESC, id DESC"
-        : "is_pinned DESC, updated_at DESC, id DESC";
+        : params.sort === "title-desc"
+          ? "is_pinned DESC, title COLLATE NOCASE DESC, updated_at DESC, id DESC"
+          : "is_pinned DESC, updated_at DESC, id DESC";
   const tag = params.tag?.trim() ?? "";
   const limit = params.limit ?? 50;
   const offset = Math.max(0, params.offset ?? 0);
